@@ -3,32 +3,60 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:HuffmanCompression.TreeUI"
-             mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type local:TreeUiNode}}"
+             xmlns:l="clr-namespace:HuffmanCompression.TreeUI"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type l:TreeUiNode}}"
              d:DesignHeight="450" d:DesignWidth="800"
-						 Width="60" Height="50" Margin="30, 20"
-						 >
-    <UserControl.Content>
-			<Grid>
-				<Ellipse Fill="LightSteelBlue" Stroke="DimGray" StrokeThickness="1">
-					<Ellipse.Effect>
-						<DropShadowEffect BlurRadius="8" Color="DimGray" Direction="270" Opacity="0.3" ShadowDepth="4"/>
-					</Ellipse.Effect>
-				</Ellipse>
+						 Width="60" Height="50" Margin="20, 10"
+						 ToolTipService.HasDropShadow="True" >
+	<UserControl.Resources>
+		<DataTemplate x:Key="tooltipDT" DataType="l:TreeUiNode" >
+			<Grid >
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="10"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
 				<StackPanel Orientation="Vertical">
-					<TextBlock Text="{Binding NodeContent, Mode=OneWay}" FontSize="18" HorizontalAlignment="Center"/>
-					<TextBlock Text="{Binding Id, Mode=OneWay}" FontSize="16" HorizontalAlignment="Center"/>
+					<TextBlock Text="Numer:" FontSize="16" HorizontalAlignment="Right"/>
+					<TextBlock Text="Waga:" FontSize="16" HorizontalAlignment="Right"/>
+					<TextBlock x:Name="charLabel" Text="Znak:" FontSize="16" HorizontalAlignment="Right" Visibility="Collapsed" />
+					<TextBlock x:Name="codeLabel" Text="Aktualny kod:" HorizontalAlignment="Right" FontSize="16" Visibility="Collapsed"/>
+				</StackPanel>
+				<StackPanel Grid.Column="2" Orientation="Vertical">
+					<TextBlock Text="{Binding Id, Mode=OneTime}" FontSize="16" />
+					<TextBlock Text="{Binding Width, Mode=OneTime}" FontSize="16" />
+					<TextBlock x:Name="char" Text="{Binding Node.Character, Mode=OneTime}" FontSize="16" Visibility="Collapsed"/>
+					<TextBlock x:Name="code" Text="{Binding Node.ActualCode, Mode=OneTime}" FontSize="16" Visibility="Collapsed"/>
 				</StackPanel>
 			</Grid>
-		</UserControl.Content>
-		<UserControl.ToolTip>
-			<Border Background="LightSteelBlue" BorderBrush="DimGray" BorderThickness="1,2,1,1">
-				<Border.Effect>
+			<DataTemplate.Triggers>
+				<DataTrigger Binding="{Binding Node.IsLeafNode, Mode=OneTime}" Value="True">
+					<Setter TargetName="charLabel" Property="Visibility" Value="Visible" />
+					<Setter TargetName="char" Property="Visibility" Value="Visible" />
+					<Setter TargetName="codeLabel" Property="Visibility" Value="Visible" />
+					<Setter TargetName="code" Property="Visibility" Value="Visible" />
+				</DataTrigger>
+			</DataTemplate.Triggers>
+		</DataTemplate>
+	</UserControl.Resources>
+
+	<UserControl.Content>
+		<Grid>
+			<Ellipse Fill="LightSteelBlue" Stroke="DimGray" StrokeThickness="1">
+				<Ellipse.Effect>
 					<DropShadowEffect BlurRadius="8" Color="DimGray" Direction="270" Opacity="0.3" ShadowDepth="4"/>
-				</Border.Effect>
-				<StackPanel Orientation="Vertical">
-					
-				</StackPanel>
-			</Border>
-		</UserControl.ToolTip>
+				</Ellipse.Effect>
+			</Ellipse>
+			<StackPanel Orientation="Vertical">
+				<TextBlock Text="{Binding NodeContent, Mode=OneWay}" FontSize="18" HorizontalAlignment="Center"/>
+				<TextBlock Text="{Binding Id, Mode=OneWay}" FontSize="16" HorizontalAlignment="Center"/>
+			</StackPanel>
+		</Grid>
+	</UserControl.Content>
+	<UserControl.ToolTip>
+		<ToolTip >
+			<ContentPresenter ContentTemplate="{StaticResource tooltipDT}" 
+												Content="{Binding PlacementTarget, Mode=OneWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ToolTip}}"/>
+		</ToolTip>
+	</UserControl.ToolTip>
 </UserControl>

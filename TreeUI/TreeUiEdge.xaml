@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
 						 Grid.ColumnSpan="2" Grid.RowSpan="2" >
-	<Canvas Margin="40, 30" x:Name="cnv">
+	<Canvas Margin="30, 20" x:Name="cnv">
 		<Line x:Name="leftEdge" Stroke="Black" StrokeThickness="3" X2="0" Y1="0"
 					X1="{Binding ActualWidth, ElementName=cnv, Mode=OneWay}"
 					Y2="{Binding ActualHeight, ElementName=cnv, Mode=OneWay}" />
