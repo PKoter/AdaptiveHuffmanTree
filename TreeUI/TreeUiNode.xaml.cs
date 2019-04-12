@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows.Controls;
 
 namespace HuffmanCompression.TreeUI
 {
@@ -30,6 +31,15 @@ namespace HuffmanCompression.TreeUI
 		public TreeUiNode()
 		{
 			InitializeComponent();
+			this.Loaded += OnInitialized;
+		}
+
+		private void OnInitialized(object sender, EventArgs e)
+		{
+			this.Loaded -= OnInitialized;
+
+			SetValue(Grid.ColumnProperty, Column);
+			SetValue(Grid.RowProperty,    Row);
 		}
 	}
 }

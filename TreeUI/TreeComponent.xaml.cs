@@ -13,6 +13,7 @@ namespace HuffmanCompression.TreeUI
 	{
 		private HuffmanTree _tree;
 		private List<TreeUiNode> _controlNodes;
+		private List<TreeUiEdge> _edges;
 
 		public TreeComponent()
 		{
@@ -23,10 +24,15 @@ namespace HuffmanCompression.TreeUI
 		{
 			_tree = tree;
 			_controlNodes = new List<TreeUiNode>(_tree.NodeCount);
+			_edges = new List<TreeUiEdge>(_tree.NodeCount);
 			BuildNodes();
 			SetGridCoordinates();
 
 			mainGrid.Children.Clear();
+			foreach (var edge in _edges)
+			{
+				mainGrid.Children.Add(edge);
+			}
 			foreach (var controlNode in _controlNodes)
 			{
 				mainGrid.Children.Add(controlNode);
@@ -62,6 +68,12 @@ namespace HuffmanCompression.TreeUI
 			rightControl.Row    = controlNode.Row + 1;
 			_controlNodes.Add(rightControl);
 
+			var leftEdge = TreeUiEdge.CreateEdge(controlNode, leftControl);
+			_edges.Add(leftEdge);
+
+			var rightEdge = TreeUiEdge.CreateEdge(controlNode, rightControl);
+			_edges.Add(rightEdge);
+
 			BuildChildNodes(left, leftControl);
 			BuildChildNodes(right, rightControl);
 		}
@@ -87,12 +99,6 @@ namespace HuffmanCompression.TreeUI
 			{
 				var rowDef = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
 				mainGrid.RowDefinitions.Add(rowDef);
-			}
-
-			foreach (var controlNode in _controlNodes)
-			{
-				controlNode.SetValue(Grid.ColumnProperty, controlNode.Column);
-				controlNode.SetValue(Grid.RowProperty, controlNode.Row);
 			}
 		}
 	}

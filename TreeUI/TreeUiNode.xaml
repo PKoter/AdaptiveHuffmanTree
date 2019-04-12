@@ -9,11 +9,26 @@
 						 Width="60" Height="50" Margin="30, 20"
 						 >
     <UserControl.Content>
-			<Border Background="CornflowerBlue" BorderBrush="Black" BorderThickness="1">
+			<Grid>
+				<Ellipse Fill="LightSteelBlue" Stroke="DimGray" StrokeThickness="1">
+					<Ellipse.Effect>
+						<DropShadowEffect BlurRadius="8" Color="DimGray" Direction="270" Opacity="0.3" ShadowDepth="4"/>
+					</Ellipse.Effect>
+				</Ellipse>
 				<StackPanel Orientation="Vertical">
-					<TextBlock Text="{Binding NodeContent, Mode=OneWay}" FontSize="20" HorizontalAlignment="Center"/>
-					<TextBlock Text="{Binding Id, Mode=OneWay}" FontSize="18" HorizontalAlignment="Center"/>
+					<TextBlock Text="{Binding NodeContent, Mode=OneWay}" FontSize="18" HorizontalAlignment="Center"/>
+					<TextBlock Text="{Binding Id, Mode=OneWay}" FontSize="16" HorizontalAlignment="Center"/>
+				</StackPanel>
+			</Grid>
+		</UserControl.Content>
+		<UserControl.ToolTip>
+			<Border Background="LightSteelBlue" BorderBrush="DimGray" BorderThickness="1,2,1,1">
+				<Border.Effect>
+					<DropShadowEffect BlurRadius="8" Color="DimGray" Direction="270" Opacity="0.3" ShadowDepth="4"/>
+				</Border.Effect>
+				<StackPanel Orientation="Vertical">
+					
 				</StackPanel>
 			</Border>
-		</UserControl.Content>
+		</UserControl.ToolTip>
 </UserControl>

@@ -63,6 +63,9 @@
     <Compile Include="TreeUI\TreeComponent.xaml.cs">
       <DependentUpon>TreeComponent.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TreeUI\TreeUiEdge.xaml.cs">
+      <DependentUpon>TreeUiEdge.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TreeUI\TreeUiNode.xaml.cs">
       <DependentUpon>TreeUiNode.xaml</DependentUpon>
     </Compile>
@@ -79,6 +82,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="TreeUI\TreeComponent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TreeUI\TreeUiEdge.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
