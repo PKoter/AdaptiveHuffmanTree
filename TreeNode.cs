@@ -13,9 +13,9 @@ namespace HuffmanCompression
 		public int      Weigth    { get; private set; }
 		public char?    Character { get; private set; }
 
-		public bool IsNytNode      => Character == null && Weigth == 0 && Left == Right;
+		public bool IsNytNode      => Character == null && Weigth == 0;
 		public bool IsLeafNode     => Character != null;
-		public bool IsInternalNode => Left != null && Right != null;
+		public bool IsInternalNode => Character == null && Left != null && Right != null;
 		public bool IsRootNode     => Parent == null;
 
 		public string ActualCode => GetActualCode();
@@ -36,31 +36,9 @@ namespace HuffmanCompression
 			Right = charNode;
 		}
 
-		public void IncreaseWeights()
+		public void IncreaseWeight()
 		{
-			if(IsLeafNode == false)
-				throw new InvalidOperationException();
-
-			Weigth = 1;
-			var upperNode = Parent;
-			while (upperNode != null)
-			{
-				upperNode.Weigth += 1;
-				upperNode = upperNode.Parent;
-			}
-		}
-
-		public void SwapChildNodes()
-		{
-			var leftId = Left.Id;
-			var rightId = Right.Id;
-
-			var temp = Left;
-			Left = Right;
-			Right = temp;
-
-			Left.Id = leftId;
-			Right.Id = rightId;
+			Weigth += 1;
 		}
 
 		public string GetActualCode()
@@ -69,13 +47,11 @@ namespace HuffmanCompression
 				return null;
 
 			var codeBuilder = new StringBuilder(32);
-			int i = 0;
 			var actual = this;
 			var parent = Parent;
 			while (parent != null)
 			{
 				codeBuilder.Append(parent.Right == actual ? '1' : '0');
-				i++;
 				actual = parent;
 				parent = parent.Parent;
 			}
@@ -83,6 +59,44 @@ namespace HuffmanCompression
 			codeBuilder.CopyTo(0, chars, 0, chars.Length);
 			Array.Reverse(chars);
 			return new string(chars);
+		}
+
+		public void SwapWith([CanBeNull] TreeNode node)
+		{
+			if (node == null)
+				return;
+
+			if (Parent == null || node.Parent == null)
+				return;
+
+			if (this == node || Parent == node || node.Parent == this)
+				return;
+
+			var id = Id;
+			var nodeId = node.Id;
+			Id = nodeId;
+			node.Id = id;
+
+			var parent     = Parent;
+			var nodeParent = node.Parent;
+			
+			if(parent.Left != this && parent.Right != this)
+				throw new InvalidOperationException();
+			if(nodeParent.Left != node && nodeParent.Right != node)
+				throw new InvalidOperationException();
+
+			if (parent.Left == this)
+				parent.Left = node;
+			else
+				parent.Right = node;
+
+			if (nodeParent.Left == node)
+				nodeParent.Left = this;
+			else
+				nodeParent.Right = this;
+
+			node.Parent = parent;
+			Parent      = nodeParent;
 		}
 	}
 }

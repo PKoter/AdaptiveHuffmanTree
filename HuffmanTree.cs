@@ -26,71 +26,79 @@ namespace HuffmanCompression
 		public void AddCharacter(char @char)
 		{
 			var exisingCharNode = _allNodes.FirstOrDefault(n => n.Character == @char);
+			TreeNode currentNode;
+			TreeNode incrementLeaf;
 			if (exisingCharNode != null)
+				(currentNode, incrementLeaf) = AddExisingCharacter(exisingCharNode);
+			else
 			{
-				AddedExisingCharacter(exisingCharNode);
-				return;
+				currentNode = _nytNode;
+				AddNewCharacter(@char);
+				incrementLeaf = currentNode.Right;
 			}
+			while (currentNode != null)
+				currentNode = RebalanceNode(currentNode);
 
+			if (incrementLeaf != null)
+				RebalanceNode(incrementLeaf);
+		}
+
+		private (TreeNode currentNode, TreeNode incLeaf) AddExisingCharacter([NotNull] TreeNode charNode)
+		{
+			var leafLeader = GetLeafBlockLeader(charNode.Weigth);
+			charNode.SwapWith(leafLeader);
+
+			return !charNode.IsNytNode && charNode.Parent.Left.IsNytNode ? (charNode.Parent, charNode) : (charNode, null);
+		}
+
+		[CanBeNull]
+		private TreeNode GetLeafBlockLeader(int weigth)
+		{
+			return GetBlockLeader(weigth, n => n.IsLeafNode);
+		}
+
+		[CanBeNull]
+		private TreeNode GetBlockLeader(int weigth, Func<TreeNode, bool> predicate)
+		{
+			return _allNodes.Where(predicate)
+							.Where(n => n.Weigth == weigth)
+							.OrderByDescending(n => n.Id)
+							.FirstOrDefault();
+		}
+
+		private void AddNewCharacter(char @char)
+		{
 			_nytNode.SplitToHoldNewChar(@char);
 			var leafNode = _nytNode.Right;
-			leafNode.IncreaseWeights();
-
 			_nytNode = _nytNode.Left;
 
-			_allNodes.Add(_nytNode);
 			_allNodes.Add(leafNode);
-
-			EnforceLeafInternalNodesInOrder();
+			_allNodes.Add(_nytNode);
 		}
 
-		private void AddedExisingCharacter([NotNull] TreeNode charNode)
+		private TreeNode RebalanceNode([NotNull] TreeNode node)
 		{
-			charNode.IncreaseWeights();
-		}
-
-		private void EnforceLeafInternalNodesInOrder()
-		{
-			var internalNodes = _allNodes.Where(n => n.IsInternalNode).OrderBy(n => n.Id).ToList();
-			foreach (var internalNode in internalNodes)
+			var parentNode = node.Parent;
+			//Func<TreeNode> getParentNode = () => parentNode;
+			TreeNode leader;
+			if (node.IsInternalNode)
 			{
-				var left = internalNode.Left;
-				var right = internalNode.Right;
-				if (left.Weigth != right.Weigth)
-					continue;
-
-				if (left.IsLeafNode && left.Id > right.Id || right.IsLeafNode && right.Id > left.Id)
-				{
-					internalNode.SwapChildNodes();
-				}
+				leader = GetLeafBlockLeader(node.Weigth + 1);
+				leader?.SwapWith(node);
+				node.IncreaseWeight();
+				return parentNode;
 			}
-
-		}
-
-
-		private void RebalanceTree()
-		{
-			var leafNodesByWeight = GetNodesByWeight(n => n.IsLeafNode);
-			var internalNodesByWeight = GetNodesByWeight(n => n.IsInternalNode && !n.IsRootNode);
-
-			foreach (var internalNodes in internalNodesByWeight)
+			else
 			{
-				var leafNodes = leafNodesByWeight.First(g => g.Key == internalNodes.Key);
-				var maxIdInternalNode = internalNodes.First();
-				var maxIdLeafNode = leafNodes.First();
-
-				
-
+				leader = GetBlockLeader(node.Weigth, n => n.IsInternalNode);
+				//getParentNode = () => node.Parent;
+				leader?.SwapWith(node);
+				node.IncreaseWeight();
+				return node.Parent;
 			}
-		}
-
-		[NotNull]
-		private List<IGrouping<int, TreeNode>> GetNodesByWeight([NotNull] Func<TreeNode, bool> selectPredicate)
-		{
-			return _allNodes.Where(selectPredicate)
-							.OrderByDescending(n => n.Id)
-							.GroupBy(n => n.Weigth)
-							.ToList();
+			//leader?.SwapWith(node);
+			//node.IncreaseWeight();
+			//return getParentNode();
 		}
 	}
 }
