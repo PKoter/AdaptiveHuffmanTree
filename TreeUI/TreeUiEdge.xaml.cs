@@ -30,8 +30,13 @@ namespace HuffmanCompression.TreeUI
 			else
 				rightEdge.Visibility = Visibility.Collapsed;
 
-			SetValue(Grid.ColumnProperty, Math.Min(UpperNode.Column, LowerNode.Column));
-			SetValue(Grid.RowProperty,    Math.Min(UpperNode.Row,    LowerNode.Row));
+			var row        = UpperNode.Row;
+			var column     =  Math.Min(UpperNode.Column, LowerNode.Column);
+			var columnSpan = Math.Abs(UpperNode.Column - LowerNode.Column) + 1;
+
+			SetValue(Grid.RowProperty,        row);
+			SetValue(Grid.ColumnProperty,     column);
+			SetValue(Grid.ColumnSpanProperty, columnSpan);
 		}
 
 		[NotNull]

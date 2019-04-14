@@ -1,5 +1,5 @@
-﻿using System;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
+using JetBrains.Annotations;
 
 namespace HuffmanCompression.TreeUI
 {
@@ -8,6 +8,7 @@ namespace HuffmanCompression.TreeUI
 	/// </summary>
 	public partial class TreeUiNode : UserControl
 	{
+		private TreeUiNode _parentNode;
 		private TreeNode _node;
 
 		public TreeNode Node
@@ -21,25 +22,47 @@ namespace HuffmanCompression.TreeUI
 		}
 
 		public int Column { get; set; }
+		/// <summary>
+		/// also means node depth
+		/// </summary>
 		public int Row    { get; set; }
+		//public int Depth  { get; set; }
+		/// <summary>
+		/// tells column offset relative to parent node's column value.
+		/// In first phase, it has a -1 (left), 1 (right) and 0 (root).
+		/// </summary>
+		public int ColumnOffset { get; set; } 
 
 		public int Id => _node.Id;
 		public int Weight => _node.Weigth;
 		public string NodeContent => _node.IsNytNode ? "NYT" 
-			: _node.Weigth.ToString() + (_node.Character.HasValue ? " x " + _node.Character.Value : "");
+			: _node.Weigth.ToString() + (_node.Character.HasValue ? " " + _node.Character.Value.ToString() : "");
 
-		public TreeUiNode()
+		public TreeUiNode([CanBeNull] TreeUiNode parentNode)
 		{
+			_parentNode = parentNode;
 			InitializeComponent();
-			this.Loaded += OnInitialized;
+			//this.Loaded += OnInitialized;
 		}
 
-		private void OnInitialized(object sender, EventArgs e)
+		public void ApplyCoordinates()
 		{
-			this.Loaded -= OnInitialized;
+			Column = _parentNode?.Column + ColumnOffset ?? ColumnOffset;
 
 			SetValue(Grid.ColumnProperty, Column);
 			SetValue(Grid.RowProperty,    Row);
+		}
+
+		[NotNull]
+		public static TreeUiNode Create([NotNull] TreeNode dataNode, [NotNull] TreeUiNode parent, int columnOffset)
+		{
+			var node = new TreeUiNode(parent)
+			{
+				Node         = dataNode,
+				ColumnOffset = columnOffset,
+				Row          = parent.Row + 1,
+			};
+			return node;
 		}
 	}
 }

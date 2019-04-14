@@ -20,6 +20,7 @@ namespace HuffmanCompression
 			tree.AddCharacter('a');
 			tree.AddCharacter('b');
 			tree.AddCharacter('c');
+			tree.AddCharacter('d');
 
 			treeComponent.BuildTreeUI(tree);
 		}

@@ -9,9 +9,9 @@ namespace HuffmanCompression.TreeUI
 	/// <summary>
 	/// Interaction logic for TreeComponent.xaml
 	/// </summary>
-	public partial class TreeComponent : UserControl
+	public sealed partial class TreeComponent : UserControl
 	{
-		private HuffmanTree _tree;
+		private HuffmanTree      _tree;
 		private List<TreeUiNode> _controlNodes;
 		private List<TreeUiEdge> _edges;
 
@@ -26,7 +26,6 @@ namespace HuffmanCompression.TreeUI
 			_controlNodes = new List<TreeUiNode>(_tree.NodeCount);
 			_edges = new List<TreeUiEdge>(_tree.NodeCount);
 			BuildNodes();
-			SetGridCoordinates();
 
 			mainGrid.Children.Clear();
 			foreach (var edge in _edges)
@@ -42,62 +41,97 @@ namespace HuffmanCompression.TreeUI
 		private void BuildNodes()
 		{
 			var root = _tree.Root;
-			var rootControl = new TreeUiNode() { Node = root };
+			var rootControl = new TreeUiNode(null) { Node = root };
 
 			rootControl.Column = 0;
-			rootControl.Row = 0;
+			rootControl.Row    = 0;
 
 			_controlNodes.Add(rootControl);
-			BuildChildNodes(root, rootControl);
+			(int leftSpan, int rightSpan) = BuildChildNodes(root, rootControl);
+			SetGridCoordinates(rightSpan - leftSpan + 1);
 		}
 
-		private void BuildChildNodes([NotNull] TreeNode node, [NotNull] TreeUiNode controlNode)
+		private (int leftSpan, int rightSpan) BuildChildNodes([NotNull] TreeNode node, [NotNull] TreeUiNode internalNode)
 		{
-			if (node.IsInternalNode != true)
-				return;
+			if (node.IsInternalNode == false)
+				return (0, 0);
 
-			var left        = node.Left;
-			var leftControl = new TreeUiNode() { Node = left };
-			leftControl.Column = controlNode.Column - 1;
-			leftControl.Row    = controlNode.Row + 1;
-			_controlNodes.Add(leftControl);
+			var left     = node.Left;
+			var leftNode = TreeUiNode.Create(left, internalNode, -1);
+			_controlNodes.Add(leftNode);
 
-			var right        = node.Right;
-			var rightControl = new TreeUiNode() { Node = right };
-			rightControl.Column = controlNode.Column + 1;
-			rightControl.Row    = controlNode.Row + 1;
-			_controlNodes.Add(rightControl);
+			var right     = node.Right;
+			var rightNode = TreeUiNode.Create(right, internalNode, 1);
+			_controlNodes.Add(rightNode);
 
-			var leftEdge = TreeUiEdge.CreateEdge(controlNode, leftControl);
+			var leftEdge = TreeUiEdge.CreateEdge(internalNode, leftNode);
 			_edges.Add(leftEdge);
 
-			var rightEdge = TreeUiEdge.CreateEdge(controlNode, rightControl);
+			var rightEdge = TreeUiEdge.CreateEdge(internalNode, rightNode);
 			_edges.Add(rightEdge);
 
-			BuildChildNodes(left, leftControl);
-			BuildChildNodes(right, rightControl);
+			var leftSpan = BuildChildNodes(left, leftNode);
+			var rightSpan = BuildChildNodes(right, rightNode);
+
+			return AccomodateSpans(internalNode, leftNode, leftSpan, rightNode, rightSpan);
 		}
 
-		private void SetGridCoordinates()
+		private (int, int) AccomodateSpans([NotNull] TreeUiNode parent, 
+		                                   [NotNull] TreeUiNode left, (int, int) leftSpan, 
+		                                   [NotNull] TreeUiNode right, (int, int) rightSpan)
 		{
-			var leftCoord  = _controlNodes.Min(n => n.Column) * -1;
-			var rightCoord = _controlNodes.Max(n => n.Column);
+			(int leftOuter, int leftInner) = leftSpan;
+			(int rightInner, int rightOuter) = rightSpan;
 
-			var columnCount = leftCoord + rightCoord + 1;
-			_controlNodes.ForEach(n => n.Column += leftCoord);
-			var rowCount = _controlNodes.Max(n => n.Row) + 1;
+			var leftmostSpan = leftOuter - 1;
+			var rightmostSpan = rightOuter + 1;
+
+			if (leftInner == 0 || rightInner == 0)
+			{
+				goto no_balancing;
+			}
+			if (parent.ColumnOffset > 0)
+			{
+				right.ColumnOffset += 1;
+				rightmostSpan += 1;
+			}
+			else if (parent.ColumnOffset < 0)
+			{
+				left.ColumnOffset -= 1;
+				leftmostSpan -= 1;
+			}
+			else
+			{
+				// root, balance both child nodes symmetrically
+				left.ColumnOffset  -= 1;
+				leftmostSpan       -= 1;
+				right.ColumnOffset += 1;
+				rightmostSpan      += 1;
+			}
+
+		no_balancing:
+			parent.ColumnOffset = parent.ColumnOffset < 0 ? -rightmostSpan : -leftmostSpan;
+			return (leftmostSpan, rightmostSpan);
+		}
+
+		private void SetGridCoordinates(int columnCount)
+		{
+			_controlNodes.Sort((n1, n2) => n1.Row - n2.Row);
+			_controlNodes.ForEach(n => n.ApplyCoordinates());
+
+			int rowCount = _controlNodes.Last().Row + 1;
 
 			mainGrid.ColumnDefinitions.Clear();
 			mainGrid.RowDefinitions.Clear();
 
 			for (int i = 0; i < columnCount; i++)
 			{
-				var colDef = new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) };
+				var colDef = new ColumnDefinition() { Width = new GridLength(70) };
 				mainGrid.ColumnDefinitions.Add(colDef);
 			}
 			for (int i = 0; i < rowCount; i++)
 			{
-				var rowDef = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
+				var rowDef = new RowDefinition() { Height = new GridLength(60) };
 				mainGrid.RowDefinitions.Add(rowDef);
 			}
 		}

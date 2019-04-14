@@ -6,7 +6,7 @@
              xmlns:l="clr-namespace:HuffmanCompression.TreeUI"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type l:TreeUiNode}}"
              d:DesignHeight="450" d:DesignWidth="800"
-						 Width="60" Height="50" Margin="20, 10"
+						 Width="60" Height="50" Margin="5, 0, 5, 10"
 						 ToolTipService.HasDropShadow="True" >
 	<UserControl.Resources>
 		<DataTemplate x:Key="tooltipDT" DataType="l:TreeUiNode" >
@@ -24,7 +24,7 @@
 				</StackPanel>
 				<StackPanel Grid.Column="2" Orientation="Vertical">
 					<TextBlock Text="{Binding Id, Mode=OneTime}" FontSize="16" />
-					<TextBlock Text="{Binding Width, Mode=OneTime}" FontSize="16" />
+					<TextBlock Text="{Binding Weight, Mode=OneTime}" FontSize="16" />
 					<TextBlock x:Name="char" Text="{Binding Node.Character, Mode=OneTime}" FontSize="16" Visibility="Collapsed"/>
 					<TextBlock x:Name="code" Text="{Binding Node.ActualCode, Mode=OneTime}" FontSize="16" Visibility="Collapsed"/>
 				</StackPanel>
@@ -49,7 +49,7 @@
 			</Ellipse>
 			<StackPanel Orientation="Vertical">
 				<TextBlock Text="{Binding NodeContent, Mode=OneWay}" FontSize="18" HorizontalAlignment="Center"/>
-				<TextBlock Text="{Binding Id, Mode=OneWay}" FontSize="16" HorizontalAlignment="Center"/>
+				<TextBlock Text="{Binding Node.Id, Mode=OneWay}" FontSize="16" HorizontalAlignment="Center"/>
 			</StackPanel>
 		</Grid>
 	</UserControl.Content>
