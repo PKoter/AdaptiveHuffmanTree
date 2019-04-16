@@ -3,5 +3,8 @@
 Realizacja w celu kompresji danych transmisyjnych. 
 Oprócz tego, że to banalny projekt, to główne cele rysują się następująco:
 
-- [ ] Rysowanie dobrze wyglądającego, dynamicznego drzewa - korzystanie z gotowych rozwiązań to pójście na łatwiznę.
-- [ ] Przezwyciężenie mętnej dokumentacji algorytmu
+- [x] Rysowanie dobrze wyglądającego, dynamicznego drzewa - korzystanie z gotowych rozwiązań to pójście na łatwiznę.
+- [x] Przezwyciężenie mętnej dokumentacji algorytmu
+
+Wygląd przykładowego drzewa:
+<img src="./tree.PNG"/>
