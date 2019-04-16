@@ -5,9 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HuffmanCompression"
         xmlns:treeUi="clr-namespace:HuffmanCompression.TreeUI"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <StackPanel Orientation="Vertical" >
-        <treeUi:TreeComponent x:Name="treeComponent" HorizontalAlignment="Center" HorizontalContentAlignment="Center"/>
-    </StackPanel>
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d" FocusManager.FocusedElement="{Binding ElementName=input}"
+        Title="Algorytm Vittera dla kompresji Huffmana" Height="600" Width="900" MinWidth="320" MinHeight="300">
+  <DockPanel LastChildFill="True" >
+		<DockPanel DockPanel.Dock="Left" Width="300" Margin="10,6">
+			<local:LabelWrapper DockPanel.Dock="Bottom" Text="Średnia długość słowa kodowego">
+				<TextBlock x:Name="avgCodeWordText"/>
+			</local:LabelWrapper>
+			<local:LabelWrapper DockPanel.Dock="Bottom" Text="Wartość entropii" Margin="0,10">
+				<TextBlock x:Name="entropyText"/>
+			</local:LabelWrapper>
+			<local:TextDelayedInput x:Name="input" MaxLength="255" Placeholder="Kodowana treść" />
+		</DockPanel>
+		<ScrollViewer Margin="0,6,0,0" Background="Gainsboro" VerticalScrollBarVisibility="Visible" 
+									HorizontalScrollBarVisibility="Visible">
+			<Grid>
+				<treeUi:TreeComponent x:Name="treeComponent" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+				<TextBlock Text="Oczekiwanie na dane..." FontStyle="Italic" FontSize="16" VerticalAlignment="Center"
+									 HorizontalAlignment="Center" 
+									 Visibility="{Binding Text, ElementName=input, Converter={x:Static local:TextToVisibility.Instance}}"/>
+			</Grid>
+		</ScrollViewer>
+  </DockPanel>
 </Window>

@@ -83,30 +83,42 @@ namespace HuffmanCompression.TreeUI
 			(int leftOuter, int leftInner) = leftSpan;
 			(int rightInner, int rightOuter) = rightSpan;
 
-			var leftmostSpan = leftOuter - 1;
-			var rightmostSpan = rightOuter + 1;
+			var leftmostSpan = leftOuter + left.ColumnOffset;
+			var rightmostSpan = rightOuter + right.ColumnOffset;
 
 			if (leftInner == 0 || rightInner == 0)
 			{
+				// balance more symmetrically, since theres no collision on other side
+				if (right.ColumnOffset > 1)
+				{
+					right.ColumnOffset -= 1;
+					rightmostSpan -= 1;
+				}
+				if (left.ColumnOffset < -1)
+				{
+					left.ColumnOffset += 1;
+					leftmostSpan += 1;
+				}
+
 				goto no_balancing;
 			}
 			if (parent.ColumnOffset > 0)
 			{
-				right.ColumnOffset += 1;
 				rightmostSpan += 1;
+				right.ColumnOffset += 1;
 			}
 			else if (parent.ColumnOffset < 0)
 			{
-				left.ColumnOffset -= 1;
 				leftmostSpan -= 1;
+				left.ColumnOffset -= 1;
 			}
 			else
 			{
 				// root, balance both child nodes symmetrically
+				leftmostSpan -= 1;
 				left.ColumnOffset  -= 1;
-				leftmostSpan       -= 1;
+				rightmostSpan += 1;
 				right.ColumnOffset += 1;
-				rightmostSpan      += 1;
 			}
 
 		no_balancing:
@@ -126,12 +138,12 @@ namespace HuffmanCompression.TreeUI
 
 			for (int i = 0; i < columnCount; i++)
 			{
-				var colDef = new ColumnDefinition() { Width = new GridLength(70) };
+				var colDef = new ColumnDefinition() { Width = new GridLength(60) };
 				mainGrid.ColumnDefinitions.Add(colDef);
 			}
 			for (int i = 0; i < rowCount; i++)
 			{
-				var rowDef = new RowDefinition() { Height = new GridLength(60) };
+				var rowDef = new RowDefinition() { Height = new GridLength(50) };
 				mainGrid.RowDefinitions.Add(rowDef);
 			}
 		}

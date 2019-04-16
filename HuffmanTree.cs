@@ -100,5 +100,13 @@ namespace HuffmanCompression
 			//node.IncreaseWeight();
 			//return getParentNode();
 		}
+
+		[NotNull]
+		public List<(char Char, int Count, string Code)> GetCharStatistics()
+		{
+			return _allNodes.Where(n => n.IsLeafNode)
+							.Select(n => (Char: n.Character.Value, Count: n.Weigth, Code: n.ActualCode))
+							.ToList();
+		}
 	}
 }
