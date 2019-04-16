@@ -6,7 +6,7 @@
              xmlns:l="clr-namespace:HuffmanCompression.TreeUI"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type l:TreeUiNode}}"
              d:DesignHeight="450" d:DesignWidth="800"
-						 Width="60" Height="50" Margin="5, 0, 5, 10"
+						 Width="50" Height="40" Margin="5, 0, 5, 10"
 						 ToolTipService.HasDropShadow="True" >
 	<UserControl.Resources>
 		<DataTemplate x:Key="tooltipDT" DataType="l:TreeUiNode" >
@@ -42,14 +42,25 @@
 
 	<UserControl.Content>
 		<Grid>
-			<Ellipse Fill="LightSteelBlue" Stroke="DimGray" StrokeThickness="1">
+			<Ellipse StrokeThickness="1">
 				<Ellipse.Effect>
-					<DropShadowEffect BlurRadius="8" Color="DimGray" Direction="270" Opacity="0.3" ShadowDepth="4"/>
+					<DropShadowEffect BlurRadius="8" Color="DimGray" Direction="270" Opacity="0.3" ShadowDepth="3"/>
 				</Ellipse.Effect>
+				<Ellipse.Style>
+					<Style TargetType="Ellipse">
+						<Setter Property="Stroke" Value="DimGray"/>
+						<Setter Property="Fill" Value="LightSteelBlue"/>
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding Node.IsLeafNode, Mode=OneWay}" Value="True">
+								<Setter Property="Stroke" Value="LimeGreen"/>
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</Ellipse.Style>
 			</Ellipse>
 			<StackPanel Orientation="Vertical">
-				<TextBlock Text="{Binding NodeContent, Mode=OneWay}" FontSize="18" HorizontalAlignment="Center"/>
-				<TextBlock Text="{Binding Node.Id, Mode=OneWay}" FontSize="16" HorizontalAlignment="Center"/>
+				<TextBlock Text="{Binding NodeContent, Mode=OneWay}" FontSize="14" HorizontalAlignment="Center"/>
+				<TextBlock Text="{Binding Node.Id, Mode=OneWay}" FontSize="14" HorizontalAlignment="Center"/>
 			</StackPanel>
 		</Grid>
 	</UserControl.Content>

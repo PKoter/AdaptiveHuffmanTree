@@ -60,6 +60,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="HuffmanTree.cs" />
+    <Compile Include="LabelWrapper.cs" />
+    <Compile Include="TextDelayedInput.cs" />
+    <Compile Include="TextInput.cs" />
+    <Compile Include="TextToVisibility.cs" />
     <Compile Include="TreeNode.cs" />
     <Compile Include="TreeUI\TreeComponent.xaml.cs">
       <DependentUpon>TreeComponent.xaml</DependentUpon>
@@ -70,6 +74,14 @@
     <Compile Include="TreeUI\TreeUiNode.xaml.cs">
       <DependentUpon>TreeUiNode.xaml</DependentUpon>
     </Compile>
+    <Page Include="ExtendedControls.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
