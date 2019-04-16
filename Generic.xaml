@@ -1,0 +1,16 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:opt="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	
+	<SolidColorBrush opt:Freeze="true" x:Key="BackColor" Color="WhiteSmoke" />
+	<SolidColorBrush opt:Freeze="true" x:Key="TextColor" Color="Black" />
+	
+	<SolidColorBrush opt:Freeze="true" x:Key="ElementLightColor" Color="#FFF2F2F2"/>
+	<SolidColorBrush opt:Freeze="true" x:Key="ElementColor" Color="#FFF0F0F0"/>
+	<SolidColorBrush opt:Freeze="true" x:Key="ListColor" Color="#FFE8E8E8"/>
+	<SolidColorBrush opt:Freeze="true" x:Key="DisabledColor" Color="#FFE0E0E0"/>
+	
+	<SolidColorBrush opt:Freeze="true" x:Key="ErrorColor" Color="Crimson"/>
+	<SolidColorBrush opt:Freeze="true" x:Key="WarnColor" Color="PeachPuff"/>
+</ResourceDictionary>
