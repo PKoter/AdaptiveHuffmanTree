@@ -54,6 +54,19 @@ namespace HuffmanCompression
 
 			double avgCodeWordLength = statistics.Sum(s => 1.0 * s.Count / charCount * s.Code.Length);
 			this.avgCodeWordText.Text = avgCodeWordLength.ToString();
+
+			statistics.Sort((c1, c2) =>
+				{
+					var c = c2.Count - c1.Count;
+					if (c == 0)
+					{
+						var code = c1.Code.Length - c2.Code.Length;
+						return code == 0 ? c1.Code.CompareTo(c2.Code) : code;
+					}
+					return c;	
+				}
+			);
+			this.stats.ItemsSource = statistics;
 		}
 	}
 }

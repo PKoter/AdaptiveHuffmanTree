@@ -102,10 +102,10 @@ namespace HuffmanCompression
 		}
 
 		[NotNull]
-		public List<(char Char, int Count, string Code)> GetCharStatistics()
+		public List<CharInfo> GetCharStatistics()
 		{
 			return _allNodes.Where(n => n.IsLeafNode)
-							.Select(n => (Char: n.Character.Value, Count: n.Weigth, Code: n.ActualCode))
+							.Select(n => new CharInfo(n.Character.Value, n.Weigth, n.ActualCode))
 							.ToList();
 		}
 	}
