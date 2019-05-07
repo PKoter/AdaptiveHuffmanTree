@@ -35,8 +35,7 @@ namespace HuffmanCompression.TreeUI
 
 		public int Id => _node.Id;
 		public int Weight => _node.Weigth;
-		public string NodeContent => _node.IsNytNode ? "NYT" 
-			: _node.Weigth.ToString() + (_node.Character.HasValue ? " " + _node.Character.Value.ToString() : "");
+		public string NodeContent => _node.IsNytNode ? "NYT" : _node.Weigth.ToString() + GetNodeContent();
 
 		public TreeUiNode([CanBeNull] TreeUiNode parentNode)
 		{
@@ -63,6 +62,24 @@ namespace HuffmanCompression.TreeUI
 				Row          = parent.Row + 1,
 			};
 			return node;
+		}
+
+		[NotNull]
+		private string GetNodeContent()
+		{
+			if (_node.Character != null)
+			{
+				var c = _node.Character.Value;
+				return " "+ (c switch 
+					{
+						'\r' => @"\cr",
+						'\f' => @"\lf",
+						'\n' => @"\nl",
+						' '  => @"' '",
+						_    => c.ToString()
+					});
+			}
+			return "";
 		}
 	}
 }
