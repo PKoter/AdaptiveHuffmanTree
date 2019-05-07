@@ -35,7 +35,8 @@ namespace HuffmanCompression.TreeUI
 
 		public int Id => _node.Id;
 		public int Weight => _node.Weigth;
-		public string NodeContent => _node.IsNytNode ? "NYT" : _node.Weigth.ToString() + GetNodeContent();
+		public string NodeContent => _node.IsNytNode ? "NYT" : GetNodeContent();
+		public string NodeWeight => _node.IsNytNode ? "" : Weight.ToString();
 
 		public TreeUiNode([CanBeNull] TreeUiNode parentNode)
 		{
@@ -70,7 +71,7 @@ namespace HuffmanCompression.TreeUI
 			if (_node.Character != null)
 			{
 				var c = _node.Character.Value;
-				return " "+ (c switch 
+				return (c switch 
 					{
 						'\r' => @"\cr",
 						'\f' => @"\lf",

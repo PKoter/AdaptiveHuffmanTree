@@ -59,8 +59,13 @@
 				</Ellipse.Style>
 			</Ellipse>
 			<StackPanel Orientation="Vertical">
-				<TextBlock Text="{Binding NodeContent, Mode=OneWay}" FontSize="14" HorizontalAlignment="Center"/>
-				<TextBlock Text="{Binding Node.Id, Mode=OneWay}" FontSize="14" HorizontalAlignment="Center"/>
+				<TextBlock FontSize="14" HorizontalAlignment="Center">
+					<TextBlock.Inlines>
+						<Run Text="{Binding NodeWeight, Mode=OneWay}" Foreground="Black"/>
+						<Run Text="{Binding NodeContent, Mode=OneWay}" Foreground="Red"/>
+					</TextBlock.Inlines>
+				</TextBlock>
+				<TextBlock Text="{Binding Node.Id, Mode=OneWay}" FontSize="14" HorizontalAlignment="Center" Foreground="Indigo"/>
 			</StackPanel>
 		</Grid>
 	</UserControl.Content>
