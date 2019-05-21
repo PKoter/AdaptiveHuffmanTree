@@ -9,41 +9,52 @@
 				mc:Ignorable="d" FocusManager.FocusedElement="{Binding ElementName=input}"
 				Title="Algorytm Vittera dla kompresji Huffmana" Height="600" Width="900" MinWidth="320" MinHeight="300">
 	<DockPanel LastChildFill="True" >
-		<DockPanel DockPanel.Dock="Left" Width="300" Margin="10,6">
+		<DockPanel DockPanel.Dock="Left" Width="300" Margin="10,6,10,16">
 			<local:LabelWrapper DockPanel.Dock="Bottom" Text="Średnia długość słowa kodowego">
-				<TextBlock x:Name="avgCodeWordText"/>
+				<TextBox x:Name="avgCodeWordText" Focusable="True" IsReadOnly="True" Height="26" FontSize="14"/>
 			</local:LabelWrapper>
 			<local:LabelWrapper DockPanel.Dock="Bottom" Text="Wartość entropii" Margin="0,10">
-				<TextBlock x:Name="entropyText"/>
+				<TextBox x:Name="entropyText" Focusable="True" IsReadOnly="True" Height="26" FontSize="14"/>
 			</local:LabelWrapper>
 			<Grid>
 				<Grid.RowDefinitions>
-					<RowDefinition />
-					<RowDefinition />
+					<RowDefinition Height="3*"/>
+					<RowDefinition Height="5*"/>
 				</Grid.RowDefinitions>
 				<local:TextDelayedInput x:Name="input" MaxLength="255" Placeholder="Kodowana treść" Margin="0,0,0,10"/>
 				<DataGrid Grid.Row="1" x:Name="stats" d:DataContext="{d:DesignInstance Type=local:CharInfo}"
 									AreRowDetailsFrozen="True" CanUserAddRows="False" CanUserDeleteRows="False" 
 									CanUserReorderColumns="True" CanUserResizeRows="False" CanUserResizeColumns="True" 
-									CanUserSortColumns="True" IsReadOnly="True" AutoGenerateColumns="False"
+									CanUserSortColumns="True" IsReadOnly="True" AutoGenerateColumns="False" Background="Transparent"
 									HorizontalScrollBarVisibility="Hidden" HorizontalGridLinesBrush="Gainsboro" 
-									VerticalGridLinesBrush="Transparent">
+									VerticalGridLinesBrush="Transparent" ClipboardCopyMode="ExcludeHeader">
 					<DataGrid.Columns>
-						<DataGridTextColumn Header="Znak" Binding="{Binding Char, Mode=OneTime}" />
-						<DataGridTextColumn Header="Wystąpienia" Binding="{Binding Count, Mode=OneTime}" />
-						<DataGridTextColumn Header="Kod" Binding="{Binding Code, Mode=OneTime}" />
+						<DataGridTextColumn Header="Znak" Binding="{Binding Char, Mode=OneTime}" 
+																ClipboardContentBinding="{Binding Char, Mode=OneWay}"/>
+						<DataGridTextColumn Header="Wystąpienia" Binding="{Binding Count, Mode=OneTime}" 
+																ClipboardContentBinding="{Binding Count, Mode=OneWay}"/>
+						<DataGridTextColumn Header="Kod" Binding="{Binding Code, Mode=OneTime}" 
+																ClipboardContentBinding="{Binding Code, Mode=OneWay}"/>
 					</DataGrid.Columns>
 				</DataGrid>
 			</Grid>
 		</DockPanel>
-		<ScrollViewer Margin="0,6,0,0" Background="Transparent" VerticalScrollBarVisibility="Visible" 
-									HorizontalScrollBarVisibility="Visible">
-			<Grid>
-				<treeUi:TreeComponent x:Name="treeComponent" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-				<TextBlock Text="Oczekiwanie na dane..." FontStyle="Italic" FontSize="16" VerticalAlignment="Center"
-									 HorizontalAlignment="Center" 
-									 Visibility="{Binding Text, ElementName=input, Converter={x:Static local:TextToVisibility.Instance}}"/>
-			</Grid>
-		</ScrollViewer>
+		<Grid>
+			<Rectangle Width="0.5" HorizontalAlignment="Left" Fill="Transparent" Stroke="DimGray"
+								 VerticalAlignment="Stretch" StrokeThickness="0.5">
+				<Rectangle.Effect>
+					<DropShadowEffect BlurRadius="8" Color="Gray" Direction="0" Opacity="0.5" ShadowDepth="4"/>
+				</Rectangle.Effect>
+			</Rectangle>
+			<ScrollViewer Margin="0,6,0,0" Background="Transparent" VerticalScrollBarVisibility="Visible" 
+										HorizontalScrollBarVisibility="Visible">
+				<Grid Margin="6,0,0,0">
+					<treeUi:TreeComponent x:Name="treeComponent" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+					<TextBlock Text="Oczekiwanie na dane..." FontStyle="Italic" FontSize="16" VerticalAlignment="Center"
+										 HorizontalAlignment="Center" 
+										 Visibility="{Binding Text, ElementName=input, Converter={x:Static local:TextToVisibility.Instance}}"/>
+				</Grid>
+			</ScrollViewer>
+		</Grid>
 	</DockPanel>
 </Window>
