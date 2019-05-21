@@ -9,7 +9,7 @@ namespace HuffmanCompression
 	{
 		public TreeNode Root { get; private set; }
 
-		[NotNull] private TreeNode       _nytNode;
+		[NotNull] private TreeNode _nytNode;
 		[NotNull] private List<TreeNode> _allNodes;
 
 		public int NodeCount => _allNodes.Count;
@@ -47,7 +47,6 @@ namespace HuffmanCompression
 		{
 			var leafLeader = GetLeafBlockLeader(charNode.Weigth);
 			charNode.SwapWith(leafLeader);
-
 			return !charNode.IsNytNode && charNode.Parent.Left.IsNytNode ? (charNode.Parent, charNode) : (charNode, null);
 		}
 
@@ -79,7 +78,6 @@ namespace HuffmanCompression
 		private TreeNode RebalanceNode([NotNull] TreeNode node)
 		{
 			var parentNode = node.Parent;
-			//Func<TreeNode> getParentNode = () => parentNode;
 			TreeNode leader;
 			if (node.IsInternalNode)
 			{
@@ -88,17 +86,10 @@ namespace HuffmanCompression
 				node.IncreaseWeight();
 				return parentNode;
 			}
-			else
-			{
-				leader = GetBlockLeader(node.Weigth, n => n.IsInternalNode);
-				//getParentNode = () => node.Parent;
-				leader?.SwapWith(node);
-				node.IncreaseWeight();
-				return node.Parent;
-			}
-			//leader?.SwapWith(node);
-			//node.IncreaseWeight();
-			//return getParentNode();
+			leader = GetBlockLeader(node.Weigth, n => n.IsInternalNode);
+			leader?.SwapWith(node);
+			node.IncreaseWeight();
+			return node.Parent;
 		}
 
 		[NotNull]

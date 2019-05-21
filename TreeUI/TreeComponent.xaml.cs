@@ -57,11 +57,11 @@ namespace HuffmanCompression.TreeUI
 				return (0, 0);
 
 			var left     = node.Left;
-			var leftNode = TreeUiNode.Create(left, internalNode, -1);
+			var leftNode = TreeUiNode.Create(left, internalNode, columnOffset: -1);
 			_controlNodes.Add(leftNode);
 
 			var right     = node.Right;
-			var rightNode = TreeUiNode.Create(right, internalNode, 1);
+			var rightNode = TreeUiNode.Create(right, internalNode, columnOffset: 1);
 			_controlNodes.Add(rightNode);
 
 			var leftEdge = TreeUiEdge.CreateEdge(internalNode, leftNode);
