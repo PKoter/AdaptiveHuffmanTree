@@ -8,3 +8,6 @@ Oprócz tego, że to banalny projekt, to główne cele rysują się następując
 
 Wygląd przykładowego drzewa:
 <img src="./tree.PNG"/>
+
+Wygląd interfejsu aplikacji prezentuje się następująco:
+<img src="./app_ui.PNG"/>
